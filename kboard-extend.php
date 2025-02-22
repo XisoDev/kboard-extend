@@ -17,3 +17,4 @@ require_once __DIR__ . '/inc/KBoardReportSettings.php';
 
 // 플러그인 인스턴스 시작
 KBoardReport::getInstance();
+KBoardReportSettings::registerSettings();
