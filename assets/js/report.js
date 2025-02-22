@@ -1,3 +1,4 @@
+
 jQuery(document).ready(function($) {
     // 모달 HTML 추가
     $('body').append(`
@@ -31,6 +32,10 @@ jQuery(document).ready(function($) {
 
         // 신고 내용에 현재 URL 추가
         const fullContent = content + '\n\n신고된 페이지: ' + currentUrl;
+
+        // Indicator 추가
+        const $submitButton = $(this);
+        $submitButton.prop('disabled', true).text('처리 중...');
 
         $.ajax({
             url: kboardReport.ajaxUrl,

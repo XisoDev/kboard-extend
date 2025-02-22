@@ -59,8 +59,8 @@ class KBoardReport {
 
     public function addSettingsMenu() {
         add_options_page(
-            'KBoard 신고 설정',
-            'KBoard 신고',
+            'KBoard 확장 플러그인 설정',
+            'KBoard 확장 설정',
             'manage_options',
             'kboard-report',
             [KBoardReportSettings::class, 'renderSettingsPage']
@@ -77,10 +77,24 @@ class KBoardReport {
     public function handleReport() {
         check_ajax_referer('kboard-report-nonce', 'nonce');
 
-        $post_id = intval($_POST['post_id']);
-        $uid = intval($_POST['uid']);
-        $content = sanitize_textarea_field($_POST['content']);
-        $current_url = esc_url_raw($_POST['current_url']);
+
+        // 신고 데이터를 배열로 정리
+        $report_data = [
+            'post_id' => isset($_POST['post_id']) ? intval($_POST['post_id']) : 0,
+            'uid' => isset($_POST['uid']) ? intval($_POST['uid']) : 0,
+            'content' => isset($_POST['content']) ? sanitize_textarea_field(wp_unslash($_POST['content'])) : '',
+            'current_url' => isset($_POST['current_url']) ? esc_url_raw(wp_unslash($_POST['current_url'])) : '',
+        ];
+
+        // 필수 값 확인
+        if (!$report_data['post_id'] || !$report_data['uid'] || empty($report_data['content'])) {
+            wp_send_json_error(['message' => '필수 데이터가 누락되었습니다.'], 400);
+        }
+        
+        $post_id = intval($report_data['post_id']);
+        $uid = intval($report_data['uid']);
+        $content = $report_data['content'];
+        $current_url = $report_data['current_url'];
 
         // 신고된 게시글 생성
         $report_post = wp_insert_post([
@@ -112,6 +126,12 @@ class KBoardReport {
             "신고된 게시글: %s\n\n신고 내용:\n%s\n\n게시글 링크: %s",
             get_the_title($post_id),
             $content,
+            get_permalink($post_id)
+        );
+
+
+        $message .= sprintf(
+            "\n\n<hr /><a href='%s' target='_blank'>페이지 바로 가기</a>",
             get_permalink($post_id)
         );
 

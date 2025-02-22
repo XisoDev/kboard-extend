@@ -3,7 +3,7 @@
 Plugin Name: Kboard Extend
 Plugin URI: https://github.com/XisoDev/kboard-extend
 Description: KBoard 기능 확장 플러그인
-Version: 1.1
+Version: 1.2
 Author: xiso
 Author URI: https://amuz.co.kr
 License: GPL-2.0+
