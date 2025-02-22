@@ -18,7 +18,7 @@ class KBoardReport {
         add_action('admin_menu', function () {
             add_submenu_page('kboard_dashboard',
                 '신고된 게시글 관리',
-                __('신고된 게시글', 'kboard'),
+                __('신고된 게시글', 'kboard-extend'),
                 'manage_kboard',
                 'edit.php?post_type=kboard_report');
         });
